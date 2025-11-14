@@ -1,0 +1,7 @@
+I want there to be these features
+
+- selected verses
+- a option to add intervals between verses
+- a option to pause after each verse and require user input to continue
+- option to download different reciters
+- i want them to be able to type the name of a surah in english and have a list of possiblities for example surah al ikhlas surah al iclas
