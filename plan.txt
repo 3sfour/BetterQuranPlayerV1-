@@ -5,3 +5,6 @@ I want there to be these features
 - a option to pause after each verse and require user input to continue
 - option to download different reciters
 - i want them to be able to type the name of a surah in english and have a list of possiblities for example surah al ikhlas surah al iclas
+- ability to change reciters
+-verify checksum
+- its gonna break if i dont run it from this folder lol because of os.getcwd()
