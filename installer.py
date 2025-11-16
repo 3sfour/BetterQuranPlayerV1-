@@ -3,6 +3,7 @@ import os
 from config import INSTALL_PATH
 import zipfile
 import shutil
+import hashlib
 
 class QuranInstaller:
     def __init__(self,reciter):
@@ -36,7 +37,40 @@ class QuranInstaller:
     def  extract(self):
         with zipfile.ZipFile(os.path.join("audio","audio.zip"),"r") as zip_ref:
             zip_ref.extractall(self.output_path)
+    def check_hash(self):
+        check_sum = os.path.join(self.output_path,"000_checksum.md5")
+        with open(check_sum,"r") as file:
+            hashes = []
+            for line in file:
+                line =  line.split()
+                file_hash = line[0]
+                hashes.append(file_hash)
+        count = 0
+        gen_hashes = []
+        for mp3 in os.listdir(self.output_path):
+            file_path = os.path.join(self.output_path,mp3)
+            if not mp3.lower().endswith(".mp3"):
+                continue
+            # if os.path.isfile(file_path):
+            hash = hashlib.md5()
+            with open(file_path, "rb") as f:
+                for chunk in iter(lambda: f.read(4096), b""):
+                    hash.update(chunk)
+            generated_hash = hash.hexdigest()
+            count += 1
+            gen_hashes.append(generated_hash)
+            
+        return(gen_hashes == hashes)
+
     
+            
+
+                    
+                    
+                    
+        
+        
+        
     def rename(self):      
         directory_path = self.output_path
 
@@ -93,14 +127,18 @@ class QuranInstaller:
                     break
             for d in dirs:
                 if d == chapter_number:
-                    shutil.move(os.path.join(directory_path, filename), os.path.join(directory_path, d))
-
-    
+                    shutil.move(os.path.join(directory_path, filename), os.path.join(directory_path, d))   
     def run(self):
         self.download()
         self.extract()
-        self.rename()
-        self.organize()
+        if self.check_hash():
+            print("Hashing Passed")
+            self.rename()
+            self.organize()
+        else:
+            print("some hashes didnt match")
+            
+        
         
         
         
